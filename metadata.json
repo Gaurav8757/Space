@@ -1,0 +1,6 @@
+{
+  "name": "SpaceShield AI",
+  "description": "Satellite collision and space debris monitoring system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
