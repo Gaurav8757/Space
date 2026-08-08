@@ -190,45 +190,44 @@ function findClosestSatelliteFromRay({
   maxDistanceThreshold,
   domElement,
   camera,
-  scene,
   livePoints,
-  raycaster,
-  mouse,
 }: RaycastContext): { closestPt: DynamicSatellitePoint | null; minDistance: number } {
   const rect = domElement.getBoundingClientRect();
-  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
 
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(scene.children, true);
-
-  if (intersects.length === 0 || livePoints.length === 0) {
-    return { closestPt: null, minDistance: Infinity };
-  }
-
-  const hit = intersects[0];
-  const p = hit.point;
-  const r = Math.hypot(p.x, p.y, p.z);
-  if (r === 0) return { closestPt: null, minDistance: Infinity };
-
-  const hitLat = Math.asin(p.y / r) * (180 / Math.PI);
-  const hitLng = Math.atan2(-p.z, p.x) * (180 / Math.PI);
-
-  let minDistance = Infinity;
+  let minScreenDist = Infinity;
   let closestPt: DynamicSatellitePoint | null = null;
 
   livePoints.forEach((pt) => {
-    const dist = Math.hypot(pt.lat - hitLat, pt.lng - hitLng);
-    if (dist < minDistance) {
-      minDistance = dist;
-      closestPt = pt;
+    const phi = (90 - pt.lat) * (Math.PI / 180);
+    const theta = (pt.lng + 180) * (Math.PI / 180);
+    const r = 100 * (1 + pt.alt);
+    const pos = new THREE.Vector3(
+      -r * Math.sin(phi) * Math.cos(theta),
+      r * Math.cos(phi),
+      r * Math.sin(phi) * Math.sin(theta)
+    );
+
+    pos.project(camera);
+
+    if (pos.z < 1) {
+      const screenX = ((pos.x + 1) / 2) * rect.width;
+      const screenY = ((-pos.y + 1) / 2) * rect.height;
+      const screenDist = Math.hypot(mouseX - screenX, mouseY - screenY);
+
+      if (screenDist < minScreenDist) {
+        minScreenDist = screenDist;
+        closestPt = pt;
+      }
     }
   });
 
-  if (closestPt && minDistance < maxDistanceThreshold) {
-    return { closestPt, minDistance };
+  const threshold = Math.max(maxDistanceThreshold, 32);
+  if (closestPt && minScreenDist < threshold) {
+    return { closestPt, minDistance: minScreenDist };
   }
-  return { closestPt: null, minDistance };
+  return { closestPt: null, minDistance: minScreenDist };
 }
 
 function calculateOrbitPos(theta: number, baseLngDeg: number, inclinationDeg: number) {
@@ -305,94 +304,6 @@ function createSatellite3DMesh(isDebris: boolean, isSelected: boolean) {
   const scale = isSelected ? 1.3 : 1.0;
   group.scale.set(scale, scale, scale);
   return group;
-}
-
-function generateEarthCanvasDataUrl(isDay: boolean): string {
-  if (typeof document === 'undefined') return '';
-  const canvas = document.createElement('canvas');
-  canvas.width = 1024;
-  canvas.height = 512;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return '';
-
-  // Ocean
-  const grad = ctx.createLinearGradient(0, 0, 0, 512);
-  if (isDay) {
-    grad.addColorStop(0, '#0d2847');
-    grad.addColorStop(0.5, '#153d66');
-    grad.addColorStop(1, '#0d2847');
-  } else {
-    grad.addColorStop(0, '#030a16');
-    grad.addColorStop(0.5, '#07152b');
-    grad.addColorStop(1, '#030a16');
-  }
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 1024, 512);
-
-  // Lat/Lng Grid
-  ctx.strokeStyle = isDay ? 'rgba(56, 189, 248, 0.18)' : 'rgba(56, 189, 248, 0.22)';
-  ctx.lineWidth = 1;
-  for (let x = 0; x <= 1024; x += 64) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, 512);
-    ctx.stroke();
-  }
-  for (let y = 0; y <= 512; y += 64) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(1024, y);
-    ctx.stroke();
-  }
-
-  // Draw simplified landmasses
-  ctx.fillStyle = isDay ? '#1d4b73' : '#0e2947';
-  ctx.strokeStyle = isDay ? '#38bdf8' : '#1e40af';
-  ctx.lineWidth = 1.5;
-
-  const drawPoly = (pts: [number, number][]) => {
-    ctx.beginPath();
-    pts.forEach(([lon, lat], i) => {
-      const x = ((lon + 180) / 360) * 1024;
-      const y = ((90 - lat) / 180) * 512;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-  };
-
-  // North America
-  drawPoly([[-168, 65], [-120, 70], [-80, 70], [-60, 45], [-80, 25], [-105, 20], [-120, 35], [-168, 65]]);
-  // South America
-  drawPoly([[-80, 10], [-35, -5], [-40, -35], [-70, -55], [-80, -15], [-80, 10]]);
-  // Europe
-  drawPoly([[-10, 35], [30, 40], [40, 60], [20, 70], [-10, 60], [-10, 35]]);
-  // Africa
-  drawPoly([[-18, 35], [50, 30], [42, -15], [20, -35], [10, 0], [-18, 15], [-18, 35]]);
-  // Asia
-  drawPoly([[40, 60], [140, 70], [170, 60], [140, 30], [100, 10], [60, 25], [40, 40], [40, 60]]);
-  // Australia
-  drawPoly([[112, -12], [153, -15], [150, -38], [115, -35], [112, -12]]);
-
-  // Night lights / city glowing dots
-  if (!isDay) {
-    ctx.fillStyle = 'rgba(253, 224, 71, 0.85)';
-    const cities: [number, number][] = [
-      [-74, 40], [-118, 34], [-0.1, 51.5], [2.3, 48.8], [37.6, 55.7],
-      [139.6, 35.6], [121.4, 31.2], [77.2, 28.6], [55.3, 25.2], [151.2, -33.8]
-    ];
-    cities.forEach(([lon, lat]) => {
-      const x = ((lon + 180) / 360) * 1024;
-      const y = ((90 - lat) / 180) * 512;
-      ctx.beginPath();
-      ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-
-  return canvas.toDataURL();
 }
 
 function generateAtmosphericDensityPoints() {
@@ -600,10 +511,14 @@ function useGlobeSceneSetup({
     fillLight.position.set(-200, -100, -200);
     scene.add(fillLight);
 
-    const globeTexture = generateEarthCanvasDataUrl(dayNightModeRef.current === 'day');
+    const globeTexture =
+      dayNightModeRef.current === 'day'
+        ? 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
+        : 'https://unpkg.com/three-globe/example/img/earth-night.jpg';
 
     const Globe = new ThreeGlobe()
       .globeImageUrl(globeTexture)
+      .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
       .showAtmosphere(true)
       .atmosphereColor('#38bdf8')
       .atmosphereAltitude(0.22)
@@ -955,7 +870,9 @@ function useGlobeImperativeUpdates({
   useEffect(() => {
     const isDay = dayNightMode === 'day';
     if (globeRef.current) {
-      const globeTexture = generateEarthCanvasDataUrl(isDay);
+      const globeTexture = isDay
+        ? 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
+        : 'https://unpkg.com/three-globe/example/img/earth-night.jpg';
       globeRef.current.globeImageUrl(globeTexture);
       globeRef.current.atmosphereColor(isDay ? '#38bdf8' : '#1d4ed8');
     }
