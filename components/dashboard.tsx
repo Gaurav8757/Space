@@ -128,7 +128,7 @@ function DashboardHeader({
 
       <div className={`flex flex-wrap items-center gap-2 sm:gap-3 sm:border-l sm:pl-4 ${isDay ? 'sm:border-slate-300' : 'sm:border-[#1d304f]'}`}>
         <div
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-mono shadow-inner ${isDay ? 'bg-slate-100 border-slate-300 text-slate-900 font-medium' : 'bg-[#070e1b] border-[#1b2c48]'}`}
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[11px] font-mono shadow-inner ${isDay ? 'bg-slate-100 border-slate-300 text-slate-900 font-medium' : 'bg-[#070e1b] border-[#1b2c48]'}`}
           title="REST API v1 Telemetry Connection Status"
         >
           <span
@@ -138,14 +138,14 @@ function DashboardHeader({
                 : 'bg-red-500 shadow-[0_0_8px_#ef4444]'
             }`}
           />
-          <span className={isDay ? 'text-slate-700 text-[10px] font-bold' : 'text-slate-400 text-[10px]'}>API:</span>
+          <span className={isDay ? 'text-slate-700 text-[10px] font-bold' : 'text-slate-400 text-[10px]'}></span>
           <span className={getApiStatusStyle(apiConnected, isDay)}>
             {apiConnected ? 'ONLINE' : 'OFFLINE'}
           </span>
         </div>
 
         <div
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-mono shadow-inner ${isDay ? 'bg-slate-100 border-slate-300 text-slate-900 font-medium' : 'bg-[#070e1b] border-[#1b2c48]'}`}
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[11px] font-mono shadow-inner ${isDay ? 'bg-slate-100 border-slate-300 text-slate-900 font-medium' : 'bg-[#070e1b] border-[#1b2c48]'}`}
           title="Real-time orbital data age and sync state"
         >
           <span className={`w-2 h-2 rounded-full ${getFreshnessDotStyle(isRefreshing, isFresh)}`} />
@@ -156,7 +156,7 @@ function DashboardHeader({
         </div>
 
         <div
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-mono shadow-inner ${isDay ? 'bg-slate-100 border-slate-300 text-slate-900 font-medium' : 'bg-[#070e1b] border-[#1b2c48]'}`}
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[11px] font-mono shadow-inner ${isDay ? 'bg-slate-100 border-slate-300 text-slate-900 font-medium' : 'bg-[#070e1b] border-[#1b2c48]'}`}
           title="Orbital threat evaluation system health"
         >
           <span
@@ -166,7 +166,7 @@ function DashboardHeader({
                 : 'bg-emerald-500 shadow-[0_0_8px_#34d399]'
             }`}
           />
-          <span className={isDay ? 'text-slate-700 text-[10px] font-bold' : 'text-slate-400 text-[10px]'}>HEALTH:</span>
+          <span className={isDay ? 'text-slate-700 text-[10px] font-bold' : 'text-slate-400 text-[10px]'}></span>
           <span className={getHealthStatusStyle(highRiskCount, isDay)}>
             {highRiskCount > 0 ? `${highRiskCount} ALERTS` : 'NOMINAL'}
           </span>
@@ -194,44 +194,44 @@ function OverviewKpiCards({
 
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full min-w-0">
-      <div className={`p-4 rounded-xl border flex items-center justify-between gap-2 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
+      <div className={`p-4 rounded-xl border flex items-center justify-between gap-3 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
         <div className="min-w-0 flex-1">
           <div className={`text-xs font-mono font-medium ${labelClass}`}>Total Tracked Assets</div>
           <div className="text-2xl font-bold text-cyan-600 mt-0.5">{satellitesCount}</div>
-          <div className={`text-[10px] font-mono mt-0.5 truncate ${isDay ? 'text-slate-500' : 'text-slate-400'}`}>LEO Payload & Constellations</div>
+          <div className={`text-[10px] font-mono mt-0.5 ${isDay ? 'text-slate-500' : 'text-slate-400'}`}>LEO Payload & Constellations</div>
         </div>
         <div className={`p-3 rounded-lg border shrink-0 ${isDay ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400'}`}>
           <OrbitIcon className="w-6 h-6" />
         </div>
       </div>
 
-      <div className={`p-4 rounded-xl border flex items-center justify-between gap-2 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
+      <div className={`p-4 rounded-xl border flex items-center justify-between gap-3 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
         <div className="min-w-0 flex-1">
           <div className={`text-xs font-mono font-medium ${labelClass}`}>Tracked Threat Vectors</div>
           <div className="text-2xl font-bold text-cyan-600 mt-0.5">{predictionsCount}</div>
-          <div className={`text-[10px] font-mono mt-0.5 truncate ${isDay ? 'text-slate-500' : 'text-slate-400'}`}>Conjunction Coordinates</div>
+          <div className={`text-[10px] font-mono mt-0.5 ${isDay ? 'text-slate-500' : 'text-slate-400'}`}>Conjunction Coordinates</div>
         </div>
         <div className={`p-3 rounded-lg border shrink-0 ${isDay ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400'}`}>
           <Activity className="w-6 h-6" />
         </div>
       </div>
 
-      <div className={`p-4 rounded-xl border flex items-center justify-between gap-2 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
+      <div className={`p-4 rounded-xl border flex items-center justify-between gap-3 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
         <div className="min-w-0 flex-1">
           <div className={`text-xs font-mono font-medium ${labelClass}`}>Critical High Risk</div>
           <div className="text-2xl font-bold text-red-600 mt-0.5">{highRiskCount}</div>
-          <div className="text-[10px] text-red-500 font-mono font-bold mt-0.5 truncate">Immediate Evasion Required</div>
+          <div className="text-[10px] text-red-500 font-mono font-bold mt-0.5">Immediate Evasion Required</div>
         </div>
         <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 shrink-0">
           <AlertTriangle className="w-6 h-6" />
         </div>
       </div>
 
-      <div className={`p-4 rounded-xl border flex items-center justify-between gap-2 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
+      <div className={`p-4 rounded-xl border flex items-center justify-between gap-3 transition-colors shadow-sm min-w-0 ${cardContainerClass}`}>
         <div className="min-w-0 flex-1">
           <div className={`text-xs font-mono font-medium ${labelClass}`}>Medium Warning</div>
           <div className="text-2xl font-bold text-amber-600 mt-0.5">{mediumRiskCount}</div>
-          <div className="text-[10px] text-amber-600 font-mono mt-0.5 truncate">Cautionary Monitoring</div>
+          <div className="text-[10px] text-amber-600 font-mono mt-0.5">Cautionary Monitoring</div>
         </div>
         <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-500 shrink-0">
           <Radio className="w-6 h-6" />
@@ -257,7 +257,7 @@ function PredictionCard({
   const formattedTime = item.closestApproach ? `${new Date(item.closestApproach).toISOString().slice(11, 16)} UTC` : 'TCA Pending';
 
   return (
-    <div className={`p-4 rounded-lg border transition-all space-y-3 flex flex-col justify-between ${cardBg}`}>
+    <div className={`w-full min-w-0 p-4 rounded-lg border transition-all space-y-3 flex flex-col justify-between md:last:odd:col-span-2 lg:last:odd:col-span-1 ${cardBg}`}>
       <div className="flex items-center justify-between">
         <span className={`text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded ${badgeColor}`}>
           {item.riskLevel} RISK · Score: {(item.riskScore * 100).toFixed(0)}%
@@ -267,19 +267,24 @@ function PredictionCard({
         </span>
       </div>
 
-      <div className={`font-bold text-xs sm:text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-2 p-2 rounded border min-w-0 ${isDay ? 'bg-[#f8fafc] border-slate-300 text-slate-900 shadow-inner' : 'bg-[#070e1b] border-[#172844] text-slate-100'}`}>
-        <span className={`font-mono truncate max-w-full ${isDay ? 'text-cyan-950 font-extrabold' : 'text-cyan-400'}`}>{item.primaryName}</span>
-        <span className="text-xs text-rose-500 font-bold shrink-0 hidden sm:inline">×</span>
-        <span className={`font-mono truncate max-w-full ${isDay ? 'text-slate-900 font-bold' : 'text-slate-200'}`}>{item.secondaryName}</span>
+      <div className={`font-bold text-xs flex flex-col justify-between gap-1 p-2 rounded border min-w-0 ${isDay ? 'bg-[#f8fafc] border-slate-300 text-slate-900 shadow-inner' : 'bg-[#070e1b] border-[#172844] text-slate-100'}`}>
+        <div className="flex items-center justify-between gap-1 min-w-0">
+          <span className="text-[10px] text-slate-400 font-mono">Primary Target:</span>
+          <span className={`font-mono truncate ${isDay ? 'text-cyan-950 font-extrabold' : 'text-cyan-400'}`}>{item.primaryName}</span>
+        </div>
+        <div className="flex items-center justify-between gap-1 min-w-0 border-t border-slate-700/20 pt-1">
+          <span className="text-[10px] text-rose-400 font-mono">Secondary Object:</span>
+          <span className={`font-mono truncate ${isDay ? 'text-slate-900 font-bold' : 'text-slate-200'}`}>{item.secondaryName}</span>
+        </div>
       </div>
 
-      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs pt-2 border-t ${isDay ? 'text-slate-700 border-slate-200' : 'text-slate-400 border-[#1b2a44]'}`}>
-        <span className="whitespace-nowrap">Miss Distance: <strong className={`font-mono ${isDay ? 'text-slate-900 font-extrabold' : 'text-slate-100'}`}>{item.missDistanceKm} km</strong></span>
-        <div className="flex items-center gap-2 flex-wrap">
+      <div className={`flex flex-col lg:flex-row sm:items-center justify-between gap-2 text-xs pt-2 border-t ${isDay ? 'text-slate-700 border-slate-200' : 'text-slate-400 border-[#1b2a44]'}`}>
+        <span className="whitespace-nowrap font-medium">Miss Distance: <strong className={`font-mono ${isDay ? 'text-slate-900 font-extrabold' : 'text-slate-100'}`}>{item.missDistanceKm} km</strong></span>
+        <div className="flex flex-col sm:flex-row items-center gap-1.5 w-full lg:w-auto">
           <button
             type="button"
             onClick={() => onAiDiagnose(item)}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold flex items-center gap-1 transition-all duration-150 active:scale-95 cursor-pointer ${
+            className={`w-full lg:w-auto text-nowrap flex-1 px-3 py-1.5 rounded text-[11px] font-bold flex items-center justify-center gap-1 transition-all duration-150 active:scale-95 cursor-pointer ${
               isDay
                 ? 'bg-cyan-800 hover:bg-cyan-700 text-white border border-cyan-950 shadow-sm'
                 : 'bg-cyan-950 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 border border-cyan-700'
@@ -291,7 +296,7 @@ function PredictionCard({
           <button
             type="button"
             onClick={() => onPlanManeuver(item)}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold flex items-center gap-1 transition-all duration-150 active:scale-95 cursor-pointer ${
+            className={`w-full lg:w-auto flex-1 px-3 py-1.5 rounded text-[11px] font-bold flex items-center justify-center gap-1 transition-all duration-150 active:scale-95 cursor-pointer ${
               isDay
                 ? 'bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-950 shadow-sm'
                 : 'bg-emerald-950 hover:bg-emerald-500 hover:text-slate-950 text-emerald-300 border border-emerald-700'
@@ -316,8 +321,8 @@ function SatelliteInventoryTable({
 }>) {
   return (
     <section className={`p-4 rounded-xl border space-y-4 ${isDay ? 'bg-white border-slate-300 shadow-sm text-slate-900' : 'bg-[#0c1425] border-[#1d304f] text-slate-100'}`}>
-      <div className="flex items-center justify-between">
-        <h2 className={`text-sm font-semibold uppercase tracking-wider flex items-center gap-2 ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
+      <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
+        <h2 className={`text-[10px] sm:text-sm font-semibold uppercase tracking-wider flex items-center gap-2 ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
           <OrbitIcon className="w-4 h-4 text-cyan-500" /> Active Catalog Assets ({filteredSatellites.length})
         </h2>
         <span className={`text-xs font-mono ${isDay ? 'text-slate-500' : 'text-slate-400'}`}>CelesTrak Catalog Synchronized</span>
@@ -356,7 +361,7 @@ function SatelliteInventoryTable({
                   <button
                     type="button"
                     onClick={() => onSelectSat(sat)}
-                    className={`px-3 py-1.5 rounded text-[11px] font-bold transition-all duration-150 active:scale-95 cursor-pointer ${
+                    className={`px-3 py-1.5 rounded text-[10px] font-semibold text-nowrap transition-all duration-150 active:scale-95 cursor-pointer ${
                       isDay
                         ? 'bg-cyan-700 hover:bg-cyan-800 text-white shadow-md border border-cyan-800'
                         : 'bg-[#162744] hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 border border-cyan-600 font-extrabold'
@@ -443,7 +448,7 @@ function Live3DOrbitalSection({
         <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-3 ${isDay ? 'border-slate-200' : 'border-[#1b2b46]'}`}>
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-cyan-600" />
-            <h2 className={`text-sm font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
+            <h2 className={`text-[10px] md:text-sm font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
               Live 3D Orbital Projection
             </h2>
           </div>
@@ -462,7 +467,7 @@ function Live3DOrbitalSection({
           />
         </div>
 
-        <div className={`p-3 rounded-lg border grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 ${isDay ? 'bg-slate-50 border-slate-300 shadow-inner' : 'bg-[#070e1b] border-[#1b2b46]'}`}>
+        <div className={`p-3 rounded-lg border grid grid-cols-2 sm:grid-cols-4 gap-3 ${isDay ? 'bg-slate-50 border-slate-300 shadow-inner' : 'bg-[#070e1b] border-[#1b2b46]'}`}>
           <div>
             <span className={`text-[10px] block ${isDay ? 'text-slate-600 font-semibold' : 'text-slate-400'}`}>Selected Satellite</span>
             <span className={`font-extrabold text-xs line-clamp-1 ${isDay ? 'text-cyan-900' : 'text-cyan-400'}`}>{selectedSat.name}</span>
@@ -522,7 +527,7 @@ function ConjunctionThreatAlertsSection({
         <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-3 ${isDay ? 'border-slate-200' : 'border-[#1b2b46]'}`}>
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-red-500" />
-            <h2 className={`text-sm font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
+            <h2 className={`text-[10px] sm:text-sm font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
               Conjunction Threat Alerts
             </h2>
           </div>
@@ -551,7 +556,7 @@ function ConjunctionThreatAlertsSection({
               No conjunction threat vectors matching current search & filter parameters.
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               {filteredPredictions.map((item) => (
                 <PredictionCard
                   key={item.id}
@@ -578,29 +583,29 @@ function DashboardFooter({ isDay }: Readonly<{ isDay: boolean }>) {
           : 'bg-gradient-to-r from-[#060d19] via-[#0b172a] to-[#081223] border-[#1d3356] text-slate-200'
       }`}
     >
-      <div className="flex flex-col md:flex-row items-center justify-between gap-5">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-5">
+        <div className="flex flex-col lg:flex-row items-center gap-3">
           <SpaceShieldLogo size={36} showText={true} isDay={isDay} />
-          <div className={`hidden sm:block h-8 w-px ${isDay ? 'bg-slate-300' : 'bg-cyan-900/50'}`} />
-          <p className={`hidden sm:block text-xs font-medium max-w-xs leading-tight ${isDay ? 'text-slate-600' : 'text-slate-400'}`}>
+          <div className={`hidden lg:block h-8 w-px ${isDay ? 'bg-slate-300' : 'bg-cyan-900/50'}`} />
+          <p className={`hidden lg:block text-xs font-medium max-w-xs leading-tight ${isDay ? 'text-slate-600' : 'text-slate-400'}`}>
             Autonomous Space Situational Awareness & Satellite Collision Avoidance Platform
           </p>
         </div>
 
         <div className="flex flex-col items-center md:items-end gap-1.5 text-center md:text-right">
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-2 text-xs sm:text-sm font-bold tracking-wide">
+          <div className="flex flex-col md:flex-row items-center justify-center md:justify-center gap-2 text-xs font-semibold tracking-wide">
             <span className={isDay ? 'text-slate-700' : 'text-slate-300'}>© All Rights Reserved by</span>
-            <span className="text-cyan-500 font-black text-sm uppercase tracking-wider bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/30">
+            <span className="text-cyan-500 font-black uppercase tracking-wider bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/30">
               Sayam Kumar
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-2 text-[11px] font-mono">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 text-[11px] font-mono">
             <span className={`px-2 py-0.5 rounded font-bold ${isDay ? 'bg-slate-200 text-slate-900' : 'bg-cyan-950/80 text-cyan-300 border border-cyan-800/60'}`}>
               Class IX B
             </span>
             <span className={`px-2 py-0.5 rounded font-bold ${isDay ? 'bg-slate-200 text-slate-900' : 'bg-cyan-950/80 text-cyan-300 border border-cyan-800/60'}`}>
-              Roll No. 6
+              Roll No. 06
             </span>
             <span className={`px-2.5 py-0.5 rounded font-semibold ${isDay ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-amber-950/40 text-amber-300 border border-amber-800/50'}`}>
               Saraswati Shishu Vidya Mandir, Baghmara
@@ -752,10 +757,10 @@ export function Dashboard({ initialData }: DashboardProps) {
 
       {/* Mission Control Actions Toolbar Section */}
       <section className={`p-4 rounded-xl border shadow-md transition-colors ${isDay ? 'bg-white border-slate-300' : 'bg-[#0c1425] border-[#1d304f]'}`}>
-        <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-cyan-500/20">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2 mb-3 pb-2 border-b border-cyan-500/20">
           <div className="flex items-center gap-2">
             <Sliders className="w-4 h-4 text-cyan-500" />
-            <h2 className={`text-xs font-bold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-cyan-300'}`}>
+            <h2 className={`text-[10px] md:text-sm font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-white'}`}>
               Mission Control Operations & Actions
             </h2>
           </div>
@@ -764,13 +769,13 @@ export function Dashboard({ initialData }: DashboardProps) {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-4 w-full">
           {/* Day / Night Theme Toggle */}
           <button
             type="button"
             onClick={() => setThemeMode(themeMode === 'day' ? 'night' : 'day')}
-            title="1-Click Toggle: Switch Entire Website Theme & 3D Earth Illumination between Day Mode and Night Mode"
-            className={`w-full py-2 px-2.5 rounded-lg text-[11px] font-bold font-mono transition-all duration-150 active:scale-95 flex items-center justify-center text-center gap-1.5 cursor-pointer shadow-md whitespace-nowrap ${
+            title={isDay ? "Switch to Night Mode (Dark Orbit View)" : "Switch to Day Mode (Light View)"}
+            className={`w-full sm:flex-1 py-2 px-2.5 rounded-lg text-[11px] font-bold font-mono transition-all duration-150 active:scale-95 flex items-center justify-center text-center gap-1.5 cursor-pointer shadow-md whitespace-nowrap ${
               isDay
                 ? 'bg-amber-500 text-slate-950 border border-amber-600 hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]'
                 : 'bg-indigo-950 text-indigo-300 border border-indigo-700 hover:bg-indigo-900 hover:text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]'
@@ -794,8 +799,8 @@ export function Dashboard({ initialData }: DashboardProps) {
             type="button"
             onClick={() => fetchLiveData(true)}
             disabled={isRefreshing}
-            title="Manual sync with API"
-            className={`w-full py-2 px-2.5 rounded-lg text-[11px] flex items-center justify-center text-center gap-1.5 font-mono transition-all duration-150 active:scale-95 cursor-pointer disabled:opacity-50 whitespace-nowrap ${
+            title="Sync Live Telemetry & Orbital Predictions with API"
+            className={`w-full sm:flex-1 py-2 px-2.5 rounded-lg text-[11px] flex items-center justify-center text-center gap-1.5 font-mono transition-all duration-150 active:scale-95 cursor-pointer disabled:opacity-50 whitespace-nowrap ${
               isDay
                 ? 'bg-slate-900 hover:bg-cyan-700 text-white border border-slate-950 font-bold shadow-md'
                 : 'bg-[#14233c] hover:bg-cyan-600 hover:text-slate-950 hover:border-cyan-400 text-cyan-300 border border-cyan-800/60 font-bold'
@@ -812,7 +817,8 @@ export function Dashboard({ initialData }: DashboardProps) {
               setActivePredictionForAction(null);
               setIsCopilotOpen(true);
             }}
-            className="w-full py-2 px-2.5 rounded-lg bg-gradient-to-r from-cyan-700 to-blue-700 hover:from-cyan-600 hover:to-blue-600 active:scale-95 text-white font-bold text-[11px] flex items-center justify-center text-center gap-1.5 shadow-md transition-all duration-150 border-none cursor-pointer whitespace-nowrap"
+            title="Open AI Threat Analyst Copilot for Risk Assessment"
+            className="w-full sm:flex-1 py-2 px-2.5 rounded-lg bg-gradient-to-r from-cyan-700 to-blue-700 hover:from-cyan-600 hover:to-blue-600 active:scale-95 text-white font-bold text-[11px] flex items-center justify-center text-center gap-1.5 shadow-md transition-all duration-150 border-none cursor-pointer whitespace-nowrap"
           >
             <Sparkles className="w-3.5 h-3.5 text-cyan-200 shrink-0" /> AI Analyst
           </button>
@@ -824,7 +830,8 @@ export function Dashboard({ initialData }: DashboardProps) {
               setActivePredictionForAction(null);
               setIsPlannerOpen(true);
             }}
-            className={`w-full py-2 px-2.5 rounded-lg text-[11px] flex items-center justify-center text-center gap-1.5 font-bold transition-all duration-150 active:scale-95 cursor-pointer whitespace-nowrap ${
+            title="Open Orbital Maneuver Strategy Planner"
+            className={`w-full sm:flex-1 py-2 px-2.5 rounded-lg text-[11px] flex items-center justify-center text-center gap-1.5 font-bold transition-all duration-150 active:scale-95 cursor-pointer whitespace-nowrap ${
               isDay
                 ? 'bg-slate-900 hover:bg-emerald-700 text-white border border-slate-950 shadow-md'
                 : 'bg-[#14233c] hover:bg-emerald-600 hover:text-white hover:border-emerald-500 text-slate-200 border border-[#233a60]'
@@ -838,7 +845,7 @@ export function Dashboard({ initialData }: DashboardProps) {
             type="button"
             onClick={() => generateMissionControlPDF(dashboardData, selectedSat)}
             title="Download PDF Mission Control Log for high-risk orbital conjunctions"
-            className="w-full py-2 px-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 active:scale-95 text-white text-[11px] flex items-center justify-center text-center gap-1.5 font-mono transition-all duration-150 cursor-pointer shadow-md font-bold whitespace-nowrap"
+            className="col-span-2 md:col-span-1 w-full py-2 px-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 active:scale-95 text-white text-[11px] flex items-center justify-center text-center gap-1.5 font-mono transition-all duration-150 cursor-pointer shadow-md font-bold whitespace-nowrap"
           >
             <FileText className="w-3.5 h-3.5 text-white shrink-0" /> Export PDF
           </button>
@@ -894,7 +901,7 @@ export function Dashboard({ initialData }: DashboardProps) {
 
       {/* Analytics Section */}
       <section className={`p-4 rounded-xl border space-y-4 ${isDay ? 'bg-white border-slate-300 shadow-sm text-slate-900' : 'bg-[#0c1425] border-[#1d304f] text-slate-100'}`}>
-        <h2 className={`text-sm font-semibold uppercase tracking-wider flex items-center gap-2 ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
+        <h2 className={`text-[10px] sm:text-sm font-semibold uppercase tracking-wider flex items-center gap-2 ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
           <Activity className="w-4 h-4 text-cyan-500" /> Orbital Telemetry & Space Weather Diagnostics
         </h2>
         <SpaceAnalytics themeMode={themeMode} />

@@ -986,17 +986,10 @@ function SatelliteTelemetryCard({
       >
         <div className="flex items-center gap-1.5">
           <GripHorizontal className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300" />
-          <span className="text-[9px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
+          <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
             DRAG CARD TO REPOSITION
           </span>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition-colors cursor-pointer"
-        >
-          <X className="w-4 h-4" />
-        </button>
       </div>
 
       <div className="flex items-start justify-between">
@@ -1024,22 +1017,22 @@ function SatelliteTelemetryCard({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-[11px]">
-        <div className="bg-[#050b17] p-2 rounded border border-[#162742]">
-          <div className="text-slate-400 text-[9px]">ALTITUDE</div>
-          <div className="text-cyan-300 font-bold text-xs">{activeSat.altitudeKm} km</div>
+      <div className="grid grid-cols-4 gap-1.5 text-[10px]">
+        <div className="bg-[#050b17] p-1.5 rounded border border-[#162742] text-center min-w-0">
+          <div className="text-slate-400 text-[9px] truncate">ALTITUDE</div>
+          <div className="text-cyan-300 font-bold text-[11px] truncate">{activeSat.altitudeKm} km</div>
         </div>
-        <div className="bg-[#050b17] p-2 rounded border border-[#162742]">
-          <div className="text-slate-400 text-[9px]">INCLINATION</div>
-          <div className="text-emerald-400 font-bold text-xs">{activeSat.inclinationDeg}°</div>
+        <div className="bg-[#050b17] p-1.5 rounded border border-[#162742] text-center min-w-0">
+          <div className="text-slate-400 text-[9px] truncate">INCLINATION</div>
+          <div className="text-emerald-400 font-bold text-[11px] truncate">{activeSat.inclinationDeg}°</div>
         </div>
-        <div className="bg-[#050b17] p-2 rounded border border-[#162742]">
-          <div className="text-slate-400 text-[9px]">ORBIT PERIOD</div>
-          <div className="text-slate-200 font-bold text-xs">{activeSat.periodMin} mins</div>
+        <div className="bg-[#050b17] p-1.5 rounded border border-[#162742] text-center min-w-0">
+          <div className="text-slate-400 text-[9px] truncate">PERIOD</div>
+          <div className="text-slate-200 font-bold text-[11px] truncate">{activeSat.periodMin}m</div>
         </div>
-        <div className="bg-[#050b17] p-2 rounded border border-[#162742]">
-          <div className="text-slate-400 text-[9px]">VELOCITY</div>
-          <div className="text-amber-300 font-bold text-xs">7.66 km/s</div>
+        <div className="bg-[#050b17] p-1.5 rounded border border-[#162742] text-center min-w-0">
+          <div className="text-slate-400 text-[9px] truncate">VELOCITY</div>
+          <div className="text-amber-300 font-bold text-[11px] truncate">7.66 k/s</div>
         </div>
       </div>
 
@@ -1085,6 +1078,228 @@ function SatelliteTelemetryCard({
           <span>FOCUS</span>
         </button>
       </div>
+    </div>
+  );
+}
+
+interface EarthModalHeaderProps {
+  readonly isModalOpen: boolean;
+  readonly showHud: boolean;
+  readonly setShowHud: (show: boolean) => void;
+  readonly setIsModalOpen: (open: boolean) => void;
+}
+
+function EarthModalHeader({
+  isModalOpen,
+  showHud,
+  setShowHud,
+  setIsModalOpen,
+}: EarthModalHeaderProps) {
+  if (!isModalOpen) return null;
+  return (
+    <div className="relative z-40 bg-[#071328]/90 backdrop-blur-md p-3 rounded-t-xl border border-cyan-500/50 flex items-center justify-between text-white font-mono text-xs">
+      <div className="flex items-center gap-2 text-cyan-400 font-bold">
+        <Globe className="w-4 h-4 animate-pulse text-cyan-400" />
+        <span className="truncate">3D ORBITAL GLOBE PROJECTION (POPUP MODAL)</span>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => setShowHud(!showHud)}
+          className="px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-700 hover:bg-cyan-900 text-[11px] font-bold flex items-center gap-1.5 cursor-pointer"
+        >
+          {showHud ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+          <span className="hidden sm:inline">{showHud ? 'HIDE HUD' : 'SHOW HUD'}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(false)}
+          className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-400 border border-red-500/40 hover:bg-red-500 hover:text-white transition-all cursor-pointer flex items-center gap-1 text-[11px] font-bold"
+          title="Close Fullscreen Modal"
+        >
+          <X className="w-4 h-4" />
+          <span>CLOSE</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+interface EarthHudControlsProps {
+  readonly showHud: boolean;
+  readonly telemetry: {
+    readonly targetName: string;
+    readonly lat: string;
+    readonly lon: string;
+    readonly alt: string;
+    readonly speed: string;
+  };
+  readonly showAtmosphericDensity: boolean;
+  readonly setShowAtmosphericDensity: (show: boolean) => void;
+  readonly orbitMode: 'all' | 'high_risk';
+  readonly setOrbitMode: (mode: 'all' | 'high_risk') => void;
+  readonly isOptimized: boolean;
+  readonly setIsOptimized: (optimized: boolean) => void;
+  readonly handleZoom: (delta: number) => void;
+  readonly handleResetCamera: () => void;
+}
+
+function EarthHudControls({
+  showHud,
+  telemetry,
+  showAtmosphericDensity,
+  setShowAtmosphericDensity,
+  orbitMode,
+  setOrbitMode,
+  isOptimized,
+  setIsOptimized,
+  handleZoom,
+  handleResetCamera,
+}: EarthHudControlsProps) {
+  if (!showHud) return null;
+  return (
+    <div className="relative z-30 p-3 flex items-start justify-between pointer-events-none flex-wrap gap-2 pr-56">
+
+   {/* Orbit Filter, Day/Night Toggle & Atmospheric Density Toolbar */}
+      <div className="flex flex-col items-end gap-2 pointer-events-auto">
+        <div className="grid md:grid-cols-2 grid-col-1 items-center gap-1.5 flex-wrap justify-end">
+          {/* Atmospheric Density Heatmap Overlay Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowAtmosphericDensity(!showAtmosphericDensity)}
+            title="Toggle Real-Time Thermospheric Density Heatmap Overlay (Orbital Decay Layer)"
+            className={`px-2.5 py-2 rounded-lg text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer flex items-center gap-1.5 ${
+              showAtmosphericDensity
+                ? 'bg-amber-500/35 text-amber-300 border border-amber-500/80 shadow-[0_0_12px_rgba(245,158,11,0.35)] hover:bg-amber-500/50'
+                : 'bg-[#050b17]/85 backdrop-blur-md text-slate-300 hover:text-white hover:bg-amber-900/40 border border-cyan-500/40'
+            }`}
+          >
+            <Wind className={`w-3.5 h-3.5 ${showAtmosphericDensity ? 'text-amber-400 animate-pulse' : 'text-slate-400'}`} />
+            <span>ATMOSPHERIC DENSITY</span>
+            <span
+              className={`text-[9px] px-1 py-0.2 rounded font-black ${
+                showAtmosphericDensity ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400'
+              }`}
+            >
+              {showAtmosphericDensity ? 'HEATMAP ON' : 'OFF'}
+            </span>
+          </button>
+
+          {/* Orbit Filter */}
+          <div className="flex items-center gap-1 bg-[#050b17]/85 backdrop-blur-md p-1 rounded-lg border border-cyan-500/40">
+            <button
+              type="button"
+              onClick={() => setOrbitMode('all')}
+              className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer border-none ${
+                orbitMode === 'all' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-slate-950 hover:bg-cyan-500/80'
+              }`}
+            >
+              ALL ORBITS
+            </button>
+            <button
+              type="button"
+              onClick={() => setOrbitMode('high_risk')}
+              className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer border-none ${
+                orbitMode === 'high_risk' ? 'bg-red-50 text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-red-600/80'
+              }`}
+            >
+              CRITICAL VECTOR
+            </button>
+          </div>
+
+          {/* GPU ECO Performance Optimization Toggle (1-Click) */}
+          <button
+            type="button"
+            onClick={() => setIsOptimized(!isOptimized)}
+            title={
+              isOptimized
+                ? 'Performance Mode Active: 30 FPS Low DPI Mode for smooth rendering on low-spec GPUs'
+                : 'High Fidelity Mode Active: 60 FPS Full Resolution Mode'
+            }
+            className={`px-2.5 py-2 rounded-lg text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer flex items-center gap-1.5 ${
+              isOptimized
+                ? 'bg-emerald-500/35 text-emerald-300 border border-emerald-500/80 shadow-[0_0_12px_rgba(16,185,129,0.25)] hover:bg-emerald-500/50'
+                : 'bg-[#050b17]/85 backdrop-blur-md text-slate-300 hover:text-white hover:bg-emerald-900/40 border border-cyan-500/40'
+            }`}
+          >
+            <Zap className={`w-3.5 h-3.5 ${isOptimized ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`} />
+            <span>GPU OPTIMIZATION</span>
+            <span
+              className={`text-[9px] px-1 py-0.2 rounded font-black ${
+                isOptimized ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400'
+              }`}
+            >
+              {isOptimized ? 'ECO 30FPS' : '60FPS HD'}
+            </span>
+          </button>
+
+           {/* Zoom & Reset Toolbar */}
+          <div className="flex items-center gap-1 bg-[#050b17]/85 backdrop-blur-md p-1 rounded-lg border border-cyan-500/40">
+            <button
+              type="button"
+              onClick={() => handleZoom(-1)}
+              title="Zoom In"
+              className="p-1 text-slate-300 hover:text-slate-950 hover:bg-cyan-400 rounded transition-all duration-150 active:scale-95 cursor-pointer border-none"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleZoom(1)}
+              title="Zoom Out"
+              className="p-1 text-slate-300 hover:text-slate-950 hover:bg-cyan-400 rounded transition-all duration-150 active:scale-95 cursor-pointer border-none"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleResetCamera}
+              title="Reset View"
+              className="p-1 text-slate-300 hover:text-slate-950 hover:bg-cyan-400 rounded transition-all duration-150 active:scale-95 cursor-pointer border-none"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Realtime Sub-Satellite Telemetry HUD */}
+      <div className="bg-[#050b17]/85 backdrop-blur-md px-3.5 py-2.5 rounded-lg border border-cyan-500/40 shadow-lg text-[11px] font-mono space-y-1.5 text-slate-300 pointer-events-auto min-w-[200px] max-w-[280px]">
+        <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1.5">
+          <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
+            <Crosshair className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+            <span>SUB-SATELLITE POSITION (SSP)</span>
+          </div>
+          <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> MOVING
+          </span>
+        </div>
+
+        <div className="text-[10px] text-cyan-300 font-semibold truncate">
+          TARGET: <span className="text-white">{telemetry.targetName}</span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-3 gap-y-1 pt-0.5">
+          <div className="flex justify-between">
+            <span className="text-slate-400">LAT:</span>{' '}
+            <span className="text-white font-mono font-bold">{telemetry.lat}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-400">LON:</span>{' '}
+            <span className="text-white font-mono font-bold">{telemetry.lon}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-400">ALT:</span>{' '}
+            <span className="text-emerald-400 font-mono font-bold">{telemetry.alt}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-400">SPD:</span>{' '}
+            <span className="text-cyan-400 font-mono font-bold">{telemetry.speed}</span>
+          </div>
+        </div>
+      </div>
+
+   
     </div>
   );
 }
@@ -1234,33 +1449,12 @@ export function Earth({
       <div ref={mountRef} className="w-full h-full absolute inset-0 cursor-grab active:cursor-grabbing" />
 
       {/* Popup Modal Top Bar when in Modal Mode */}
-      {isModalOpen && (
-        <div className="relative z-40 bg-[#071328]/90 backdrop-blur-md p-3 rounded-t-xl border border-cyan-500/50 flex items-center justify-between text-white font-mono text-xs">
-          <div className="flex items-center gap-2 text-cyan-400 font-bold">
-            <Globe className="w-4 h-4 animate-pulse text-cyan-400" />
-            <span className="truncate">3D ORBITAL GLOBE PROJECTION (POPUP MODAL)</span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowHud(!showHud)}
-              className="px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-700 hover:bg-cyan-900 text-[11px] font-bold flex items-center gap-1.5 cursor-pointer"
-            >
-              {showHud ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-              <span className="hidden sm:inline">{showHud ? 'HIDE HUD' : 'SHOW HUD'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(false)}
-              className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-400 border border-red-500/40 hover:bg-red-500 hover:text-white transition-all cursor-pointer flex items-center gap-1 text-[11px] font-bold"
-              title="Close Fullscreen Modal"
-            >
-              <X className="w-4 h-4" />
-              <span>CLOSE</span>
-            </button>
-          </div>
-        </div>
-      )}
+      <EarthModalHeader
+        isModalOpen={isModalOpen}
+        showHud={showHud}
+        setShowHud={setShowHud}
+        setIsModalOpen={setIsModalOpen}
+      />
 
       {/* Loading Overlay */}
       {!isGlobeLoaded && (
@@ -1298,148 +1492,18 @@ export function Earth({
       </div>
 
       {/* Top HUD Controls (Conditioned on showHud) */}
-      {showHud && (
-        <div className="relative z-30 p-3 flex items-start justify-between pointer-events-none flex-wrap gap-2 pr-44 sm:pr-3">
-          {/* Realtime Sub-Satellite Telemetry HUD */}
-          <div className="bg-[#050b17]/85 backdrop-blur-md px-3.5 py-2.5 rounded-lg border border-cyan-500/40 shadow-lg text-[11px] font-mono space-y-1.5 text-slate-300 pointer-events-auto min-w-[200px] max-w-[280px]">
-            <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1.5">
-              <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
-                <Crosshair className="w-3.5 h-3.5 animate-spin text-cyan-400" />
-                <span>SUB-SATELLITE POSITION (SSP)</span>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> MOVING
-              </span>
-            </div>
-
-            <div className="text-[10px] text-cyan-300 font-semibold truncate">
-              TARGET: <span className="text-white">{telemetry.targetName}</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1 pt-0.5">
-              <div className="flex justify-between">
-                <span className="text-slate-400">LAT:</span>{' '}
-                <span className="text-white font-mono font-bold">{telemetry.lat}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">LON:</span>{' '}
-                <span className="text-white font-mono font-bold">{telemetry.lon}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">ALT:</span>{' '}
-                <span className="text-emerald-400 font-mono font-bold">{telemetry.alt}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">SPD:</span>{' '}
-                <span className="text-cyan-400 font-mono font-bold">{telemetry.speed}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Orbit Filter, Day/Night Toggle & Atmospheric Density Toolbar */}
-          <div className="flex flex-col items-end gap-2 pointer-events-auto">
-            <div className="flex items-center gap-1.5 flex-wrap justify-end">
-              {/* Atmospheric Density Heatmap Overlay Toggle */}
-              <button
-                type="button"
-                onClick={() => setShowAtmosphericDensity(!showAtmosphericDensity)}
-                title="Toggle Real-Time Thermospheric Density Heatmap Overlay (Orbital Decay Layer)"
-                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer flex items-center gap-1.5 ${
-                  showAtmosphericDensity
-                    ? 'bg-amber-500/35 text-amber-300 border border-amber-500/80 shadow-[0_0_12px_rgba(245,158,11,0.35)] hover:bg-amber-500/50'
-                    : 'bg-[#050b17]/85 backdrop-blur-md text-slate-300 hover:text-white hover:bg-amber-900/40 border border-cyan-500/40'
-                }`}
-              >
-                <Wind className={`w-3.5 h-3.5 ${showAtmosphericDensity ? 'text-amber-400 animate-pulse' : 'text-slate-400'}`} />
-                <span>ATMOSPHERIC DENSITY</span>
-                <span
-                  className={`text-[9px] px-1 py-0.2 rounded font-black ${
-                    showAtmosphericDensity ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-400'
-                  }`}
-                >
-                  {showAtmosphericDensity ? 'HEATMAP ON' : 'OFF'}
-                </span>
-              </button>
-
-              {/* Orbit Filter */}
-              <div className="flex items-center gap-1 bg-[#050b17]/85 backdrop-blur-md p-1 rounded-lg border border-cyan-500/40">
-                <button
-                  type="button"
-                  onClick={() => setOrbitMode('all')}
-                  className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer border-none ${
-                    orbitMode === 'all' ? 'bg-cyan-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-slate-950 hover:bg-cyan-500/80'
-                  }`}
-                >
-                  ALL ORBITS
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setOrbitMode('high_risk')}
-                  className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer border-none ${
-                    orbitMode === 'high_risk' ? 'bg-red-500 text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-red-600/80'
-                  }`}
-                >
-                  CRITICAL VECTOR
-                </button>
-              </div>
-
-              {/* GPU ECO Performance Optimization Toggle (1-Click) */}
-              <button
-                type="button"
-                onClick={() => setIsOptimized(!isOptimized)}
-                title={
-                  isOptimized
-                    ? 'Performance Mode Active: 30 FPS Low DPI Mode for smooth rendering on low-spec GPUs'
-                    : 'High Fidelity Mode Active: 60 FPS Full Resolution Mode'
-                }
-                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold transition-all duration-150 active:scale-95 cursor-pointer flex items-center gap-1.5 ${
-                  isOptimized
-                    ? 'bg-emerald-500/35 text-emerald-300 border border-emerald-500/80 shadow-[0_0_12px_rgba(16,185,129,0.25)] hover:bg-emerald-500/50'
-                    : 'bg-[#050b17]/85 backdrop-blur-md text-slate-300 hover:text-white hover:bg-emerald-900/40 border border-cyan-500/40'
-                }`}
-              >
-                <Zap className={`w-3.5 h-3.5 ${isOptimized ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`} />
-                <span>GPU OPTIMIZATION</span>
-                <span
-                  className={`text-[9px] px-1 py-0.2 rounded font-black ${
-                    isOptimized ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400'
-                  }`}
-                >
-                  {isOptimized ? 'ECO 30FPS' : '60FPS HD'}
-                </span>
-              </button>
-            </div>
-
-            {/* Zoom & Reset Toolbar */}
-            <div className="flex items-center gap-1 bg-[#050b17]/85 backdrop-blur-md p-1 rounded-lg border border-cyan-500/40">
-              <button
-                type="button"
-                onClick={() => handleZoom(-1)}
-                title="Zoom In"
-                className="p-1.5 text-slate-300 hover:text-slate-950 hover:bg-cyan-400 rounded transition-all duration-150 active:scale-95 cursor-pointer border-none"
-              >
-                <ZoomIn className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleZoom(1)}
-                title="Zoom Out"
-                className="p-1.5 text-slate-300 hover:text-slate-950 hover:bg-cyan-400 rounded transition-all duration-150 active:scale-95 cursor-pointer border-none"
-              >
-                <ZoomOut className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={handleResetCamera}
-                title="Reset View"
-                className="p-1.5 text-slate-300 hover:text-slate-950 hover:bg-cyan-400 rounded transition-all duration-150 active:scale-95 cursor-pointer border-none"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <EarthHudControls
+        showHud={showHud}
+        telemetry={telemetry}
+        showAtmosphericDensity={showAtmosphericDensity}
+        setShowAtmosphericDensity={setShowAtmosphericDensity}
+        orbitMode={orbitMode}
+        setOrbitMode={setOrbitMode}
+        isOptimized={isOptimized}
+        setIsOptimized={setIsOptimized}
+        handleZoom={handleZoom}
+        handleResetCamera={handleResetCamera}
+      />
 
       {/* Atmospheric Density Legend Panel (when Heatmap Overlay is active and showHud is true) */}
       {showHud && showAtmosphericDensity && (
@@ -1489,28 +1553,30 @@ export function Earth({
       )}
 
       {/* Bottom Interactive Legend */}
-      <div className="relative z-10 p-3 bg-gradient-to-t from-[#040813] to-transparent flex items-center justify-between text-[11px] text-slate-400 font-mono pointer-events-auto">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-cyan-400" /> Active Payload (Moving)
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-red-400 animate-ping" /> Tracked Space Debris
-          </span>
-          <span
-            className={`hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono ${
-              isOptimized
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-            }`}
-          >
-            <Gauge className="w-3 h-3" /> {isOptimized ? 'MOBILE ECO (30 FPS)' : 'HIGH FIDELITY (60 FPS)'}
-          </span>
+      {showHud && (
+        <div className="relative z-10 p-3 bg-gradient-to-t from-[#040813] to-transparent flex items-center justify-between text-[11px] text-slate-400 font-mono pointer-events-auto">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-cyan-400" /> Active Payload (Moving)
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-red-400 animate-ping" /> Tracked Space Debris
+            </span>
+            <span
+              className={`hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono ${
+                isOptimized
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+              }`}
+            >
+              <Gauge className="w-3 h-3" /> {isOptimized ? 'MOBILE ECO (30 FPS)' : 'HIGH FIDELITY (60 FPS)'}
+            </span>
+          </div>
+          <div className="text-[10px] text-slate-400 hidden sm:block">
+            Hover to inspect tooltip • Click to zoom & highlight orbit • Drag to rotate globe
+          </div>
         </div>
-        <div className="text-[10px] text-slate-400 hidden sm:block">
-          Hover to inspect tooltip • Click to zoom & highlight orbit • Drag to rotate globe
-        </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={cn("font-sans", notoSans.variable, playfairDisplayHeading.variable)}>
+    <html lang="en" className={cn("font-sans", notoSans.variable, playfairDisplayHeading.variable)} suppressHydrationWarning>
       <body>
         {children}
         <Analytics />

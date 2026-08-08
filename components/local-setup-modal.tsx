@@ -4,8 +4,8 @@ import { X, Terminal, Download, Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 
 interface LocalSetupModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 export function LocalSetupModal({ isOpen, onClose }: LocalSetupModalProps) {
@@ -39,7 +39,7 @@ npm run dev`;
               <p className="text-xs text-slate-400">All API endpoints are fully integrated for standalone local execution</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 active:scale-95 transition-all duration-150 border-none cursor-pointer">
+          <button type='button' onClick={onClose} className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 active:scale-95 transition-all duration-150 border-none cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -54,7 +54,7 @@ npm run dev`;
               <span className="flex items-center gap-1 font-mono text-cyan-400">
                 <Terminal className="w-3.5 h-3.5" /> Local Terminal Setup Commands:
               </span>
-              <button
+              <button type='button'
                 onClick={copyCommand}
                 className="flex items-center gap-1 px-2 py-1 rounded bg-[#13213a] hover:bg-cyan-600 hover:text-slate-950 active:scale-95 text-cyan-400 border border-cyan-800 transition-all duration-150 cursor-pointer font-bold"
               >

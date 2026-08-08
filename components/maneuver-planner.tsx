@@ -143,7 +143,7 @@ export function ManeuverPlanner({ isOpen, onClose, prediction }: Readonly<Maneuv
                 <span className="text-slate-400 font-mono">TCA - 45 mins</span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
                 <div className="p-3 bg-[#0b1424] rounded-lg border border-[#1c2e4a]">
                   <div className="text-[11px] text-slate-400">Required ΔV</div>
                   <div className="text-lg font-bold text-cyan-400 font-mono mt-0.5">{calcResult.deltaV} m/s</div>

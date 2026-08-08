@@ -81,12 +81,6 @@ button {
 .muted {
   color: var(--muted-foreground);
 }
-.grid {
-  display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
-  gap: 1rem;
-  margin-top: 1.2rem;
-}
 .panel,
 .stat {
   background: color-mix(in srgb, var(--panel) 92%, transparent);
@@ -96,12 +90,6 @@ button {
 }
 .earth {
   height: 360px;
-}
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin: 1rem 0;
 }
 .stat strong {
   display: block;

@@ -355,24 +355,24 @@ function SpecsGrid({ activeItem, isDay }: Readonly<{ activeItem: Prediction; isD
   const labelClass = getLabelClass(isDay);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 text-xs font-mono">
-      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 ${cardClass}`}>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 text-xs font-mono w-full">
+      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 w-full h-full ${cardClass}`}>
         <span className={`text-[11px] ${labelClass}`}>Primary Object</span>
         <span className="text-cyan-600 font-bold text-sm truncate" title={activeItem.primaryName}>{activeItem.primaryName}</span>
       </div>
-      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 ${cardClass}`}>
+      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 w-full h-full ${cardClass}`}>
         <span className={`text-[11px] ${labelClass}`}>Secondary Threat</span>
         <span className="text-rose-600 font-bold text-sm truncate" title={activeItem.secondaryName}>{activeItem.secondaryName}</span>
       </div>
-      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 ${cardClass}`}>
+      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 w-full h-full ${cardClass}`}>
         <span className={`text-[11px] ${labelClass}`}>Closest Approach (TCA)</span>
         <span className={`font-semibold text-xs ${isDay ? 'text-slate-900' : 'text-white'}`}>{activeItem.closestApproach}</span>
       </div>
-      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 ${cardClass}`}>
+      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 w-full h-full ${cardClass}`}>
         <span className={`text-[11px] ${labelClass}`}>Predicted Miss Distance</span>
         <span className="text-emerald-600 font-bold text-sm">{activeItem.missDistanceKm} km</span>
       </div>
-      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 ${cardClass}`}>
+      <div className={`p-3 rounded-lg border flex flex-col justify-between space-y-1 w-full h-full ${cardClass}`}>
         <span className={`text-[11px] ${labelClass}`}>Collision Probability (Pc)</span>
         <span className="text-red-600 font-bold text-sm">{activeItem.riskScore}% (10⁻³)</span>
       </div>
@@ -403,7 +403,7 @@ function ThreatSpecsBreakdown({
       <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-2.5 ${headerBorderClass}`}>
         <div className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider ${headerTitleClass}`}>
           <Crosshair className="w-4 h-4 text-cyan-500 shrink-0" />
-          <span>THREAT SPECS & BREAKDOWN</span>
+          <span className='text-[10px] md:text-sm font-semibold uppercase tracking-wider'>THREAT SPECS & BREAKDOWN</span>
         </div>
         <span className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase border self-start sm:self-auto ${getRiskBadgeClass(activeItem.riskLevel)}`}>
           {activeItem.riskLevel} RISK ({activeItem.riskScore}%)
@@ -487,11 +487,11 @@ export function ImpactAnalysis({
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className={`p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 ${isDay ? 'bg-white border border-slate-300 shadow-sm' : 'bg-[#070d18] border border-[#172a46]'}`}>
+      <div className={`p-4 rounded-xl flex flex-col lg:flex-row md:items-center justify-between gap-3 ${isDay ? 'bg-white border border-slate-300 shadow-sm' : 'bg-[#070d18] border border-[#172a46]'}`}>
         <div>
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-cyan-600" />
-            <h3 className={`text-base font-bold tracking-tight flex items-center gap-2 ${isDay ? 'text-slate-900' : 'text-white'}`}>
+            <h3 className={`text-[10px] md:text-sm font-semibold tracking-tight flex tracking-wider items-center gap-2 ${isDay ? 'text-slate-900' : 'text-white'}`}>
               IMPACT & CONJUNCTION TREND ANALYSIS (D3 ENGINE)
             </h3>
           </div>

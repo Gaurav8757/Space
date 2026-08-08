@@ -68,7 +68,7 @@ function SpaceWeatherCard({ isDay }: Readonly<{ isDay: boolean }>) {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-2 gap-3 pt-1 w-full min-w-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1 w-full min-w-0">
         <div className={containerClass}>
           <div className={labelClass}>
             <Flame className="w-3.5 h-3.5 text-orange-500 shrink-0" /> <span className="truncate">Solar Flux (F10.7)</span>

@@ -311,10 +311,10 @@ export function GlobeTrendChart({ selectedSat, predictions, themeMode = 'night' 
 
   return (
     <div className={`p-3.5 rounded-xl space-y-2 mt-4 overflow-hidden ${isDay ? 'bg-slate-50 border border-slate-200 shadow-sm' : 'bg-[#091122] border border-[#1b2c48]'}`}>
-      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b pb-2 ${isDay ? 'border-slate-200' : 'border-[#16263e]'}`}>
+      <div className={`flex flex-col lg:flex-row sm:items-center justify-between gap-1 border-b pb-2 ${isDay ? 'border-slate-200' : 'border-[#16263e]'}`}>
         <div className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-cyan-500 shrink-0" />
-          <h3 className={`text-xs font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
+          <h3 className={`text-[10px] md:text-sm font-semibold uppercase tracking-wider ${isDay ? 'text-slate-900' : 'text-slate-100'}`}>
             24-Hour Historical Collision Probability ($P_c$) Trend
           </h3>
         </div>
